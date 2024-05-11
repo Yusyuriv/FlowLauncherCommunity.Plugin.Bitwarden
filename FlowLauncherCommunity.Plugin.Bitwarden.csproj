@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0-windows</TargetFramework>
+        <ProjectGuid>{F67E4B59-EA15-4446-9142-4E0BBE798979}</ProjectGuid>
+        <AssemblyName>FlowLauncherCommunity.Plugin.Bitwarden</AssemblyName>
+        <PackageId>FlowLauncherCommunity.Plugin.Bitwarden</PackageId>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <GenerateDocumentationFile>false</GenerateDocumentationFile>
+        <UseWpf>true</UseWpf>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)'=='Release'">
+        <DebugSymbols>false</DebugSymbols>
+        <DebugType>None</DebugType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include=".github/workflows/*" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <Content Include="plugin.json" CopyToOutputDirectory="Always" />
+        <Content Include="icon.png" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="LICENSE" CopyToOutputDirectory="PreserveNewest" />
+
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" PrivateAssets="All" />
+        <PackageReference Include="Flow.Launcher.Plugin" Version="4.2.0"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" PrivateAssets="All" />
+    </ItemGroup>
+
+</Project>

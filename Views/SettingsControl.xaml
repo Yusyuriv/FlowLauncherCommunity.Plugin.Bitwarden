@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="FlowLauncherCommunity.Plugin.Bitwarden.Views.SettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:viewModels="clr-namespace:FlowLauncherCommunity.Plugin.Bitwarden.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance viewModels:SettingsViewModel}"
+             d:DesignHeight="200" d:DesignWidth="550">
+    <StackPanel Margin="70 8 18 8">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="Path to Bitwarden CLI executable" HorizontalAlignment="Right" VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" IsEnabled="False" Margin="8 0" Text="{Binding ExePath, Mode=OneWay}" />
+            <Button Grid.Column="2" Content="Change" Command="{Binding ChangeExecutablePathCommand}" />
+        </Grid>
+    </StackPanel>
+</UserControl>

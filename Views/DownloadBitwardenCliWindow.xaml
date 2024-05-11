@@ -1,0 +1,55 @@
+﻿<Window x:Class="FlowLauncherCommunity.Plugin.Bitwarden.Views.DownloadBitwardenCliWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:viewModels="clr-namespace:FlowLauncherCommunity.Plugin.Bitwarden.ViewModels"
+        mc:Ignorable="d"
+        Background="{DynamicResource Color00B}"
+        Foreground="{DynamicResource PopupTextColor}"
+        WindowStartupLocation="CenterScreen"
+        Closing="DownloadBitwardenCliWindow_OnClosing"
+        d:DataContext="{d:DesignInstance viewModels:DownloadBitwardenCliViewModel}"
+        Title="Specify Bitwarden CLI" Height="270" Width="500" ResizeMode="NoResize">
+    <StackPanel Margin="12">
+        <TextBlock Text="Please specify the path to the Bitwarden CLI executable below:" FontSize="14"
+                   TextWrapping="Wrap" Margin="0 6 0 30" />
+        <ProgressBar Visibility="{Binding ProgressBarVisibility}" Value="{Binding ProgressBarValue}"
+                     IsIndeterminate="{Binding ProgressBarIsIndeterminate}" Minimum="0" Maximum="100" />
+
+        <TextBox Margin="0 6" Text="{Binding ExePath}" IsEnabled="{Binding IsInteractive}" />
+
+        <Grid Margin="0 6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" HorizontalAlignment="Stretch" Content="Browse" Margin="8 0"
+                    Command="{Binding BrowseCommand}"
+                    IsEnabled="{Binding IsInteractive}" />
+            <Button Grid.Column="1" HorizontalAlignment="Stretch" Content="{Binding DownloadButtonText}"
+                    Command="{Binding DownloadCommand}" IsEnabled="{Binding IsDownloadButtonInteractive}">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsInteractive}" Value="false">
+                                <Setter Property="Content" Value="Cancel download" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+        <Grid Margin="0 30 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" HorizontalAlignment="Stretch" Content="Cancel" Command="{Binding CancelCommand}"
+                    Margin="0 0 6 0" IsEnabled="{Binding IsInteractive}" />
+            <Button Grid.Column="1" HorizontalAlignment="Stretch" Content="Save" Command="{Binding SaveCommand}"
+                    Margin="6 0 0 0" IsEnabled="{Binding IsInteractive}" />
+        </Grid>
+    </StackPanel>
+</Window>

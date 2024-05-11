@@ -1,0 +1,12 @@
+{
+  "ID": "F67E4B59-EA15-4446-9142-4E0BBE798979",
+  "Version": "0.1.0",
+  "IcoPath": "icon.png",
+  "ActionKeyword": "bw",
+  "Name": "Bitwarden",
+  "Description": "A plugin for accessing Bitwarden via Flow Launcher",
+  "Author": "yusyuriv",
+  "Language": "csharp",
+  "Website": "https://github.com/yusyuriv/FlowLauncherCommunity.Plugin.Bitwarden",
+  "ExecuteFileName": "FlowLauncherCommunity.Plugin.Bitwarden.dll"
+}
