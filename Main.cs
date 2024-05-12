@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -97,15 +98,23 @@ public class Main : IAsyncPlugin, ISettingProvider, IContextMenu {
                     IncludeResultIfItMatches(list, _resultLogOut, query.Search);
                     break;
                 case EBitwardenStatus.Unlocked:
-                    IncludeResultIfItMatches(list, _resultLockVault, query.Search);
+                    var lockResult = _resultLockVault;
+                    try {
+                        var items = (await _cli.ListItems())
+                            .OrderBy(v => v.Favorite)
+                            .ThenBy(v => v.Name);
+                        foreach (var item in items) {
+                            IncludeBitwardenItemIfItMatches(list, item, query.Search);
+                        }
+                    } catch (JsonException) {
+                        _cli.SetLocked();
+                        lockResult = _resultUnlockVault;
+                    }
+
+                    IncludeResultIfItMatches(list, lockResult, query.Search);
                     IncludeResultIfItMatches(list, _resultSyncVault, query.Search);
                     IncludeResultIfItMatches(list, _resultLogOut, query.Search);
-                    var items = (await _cli.ListItems())
-                        .OrderBy(v => v.Favorite)
-                        .ThenBy(v => v.Name);
-                    foreach (var item in items) {
-                        IncludeBitwardenItemIfItMatches(list, item, query.Search);
-                    }
+
                     break;
             }
             return list;

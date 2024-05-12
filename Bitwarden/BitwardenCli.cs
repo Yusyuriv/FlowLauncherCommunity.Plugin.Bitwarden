@@ -204,4 +204,8 @@ public class BitwardenCli {
 
         throw new BitwardenException(message);
     }
+
+    public void SetLocked() {
+        _session = null;
+    }
 }
