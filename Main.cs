@@ -55,11 +55,10 @@ public class Main : IAsyncPlugin, ISettingProvider, IContextMenu {
         }
     }
 
-    private void IncludeBitwardenItemIfItMatches(List<Result> list, BitwardenItem item, string search) {
+    private void IncludeBitwardenItemIfItMatches(List<Result> list, BitwardenItemWithLogin item, string search) {
         if (!string.IsNullOrEmpty(search) &&
             !item.Login.Username.Contains(search, _stringComparison) &&
-            !item.Name.Contains(search, _stringComparison) &&
-            item.Notes?.Contains(search, _stringComparison) is not true) return;
+            !item.Name.Contains(search, _stringComparison)) return;
 
         var favorite = item.Favorite ? "⭐" : string.Empty;
         var icon = IcoPath;

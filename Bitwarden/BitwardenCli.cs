@@ -125,14 +125,24 @@ public class BitwardenCli {
         return await CreateAndRunProcess(CommandGetTotp, id.ToString());
     }
 
-    public async Task<BitwardenItem[]> ListItems(string search = "") {
+    public async Task<BitwardenItemWithLogin[]> ListItems(string search = "") {
         var args = string.IsNullOrWhiteSpace(search) switch {
             true => CommandListItems,
             false => CommandListItems.Concat(new []{ CommandListItemsArgSearch, search}).ToArray(),
         };
         var json = await CreateAndRunProcess(args);
         var items = BitwardenItem.ParseArray(json);
-        return items;
+        return items
+            .Where(v => v.Login is not null)
+            .Select(
+                v => new BitwardenItemWithLogin(
+                    v.Id,
+                    v.Name,
+                    v.Favorite,
+                    v.Login!
+                )
+            )
+            .ToArray();
     }
 
     public async Task<EBitwardenStatus> GetStatus() {
