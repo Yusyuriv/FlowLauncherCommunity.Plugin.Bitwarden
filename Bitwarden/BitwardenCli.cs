@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FlowLauncherCommunity.Plugin.Bitwarden.Bitwarden.Exceptions;
 using FlowLauncherCommunity.Plugin.Bitwarden.Bitwarden.Records;
+using OtpNet;
 
 namespace FlowLauncherCommunity.Plugin.Bitwarden.Bitwarden;
 
@@ -16,7 +17,6 @@ public class BitwardenCli {
     private const string CommandSync = "sync";
     private static readonly string[] CommandGetUsername = { "get", "username" };
     private static readonly string[] CommandGetPassword = { "get", "password" };
-    private static readonly string[] CommandGetTotp = { "get", "totp" };
     private static readonly string[] CommandGetItem = { "get", "item" };
     private static readonly string[] CommandListItems = { "list", "items" };
     private const string CommandListItemsArgSearch = "--search";
@@ -122,7 +122,12 @@ public class BitwardenCli {
     }
 
     public async Task<string> GetTotp(Guid id) {
-        return await CreateAndRunProcess(CommandGetTotp, id.ToString());
+        var item = await CreateAndRunProcess(CommandGetItem, id.ToString());
+        var totpSecret = BitwardenItem.Parse(item).Login?.Totp;
+        if (string.IsNullOrWhiteSpace(totpSecret)) return "";
+        var bytes = Base32Encoding.ToBytes(totpSecret);
+        var totp = new Totp(bytes);
+        return totp.ComputeTotp();
     }
 
     public async Task<BitwardenItemWithLogin[]> ListItems(string search = "") {

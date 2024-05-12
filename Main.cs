@@ -70,7 +70,7 @@ public class Main : IAsyncPlugin, ISettingProvider, IContextMenu {
             Title = favorite + item.Name,
             SubTitle = item.Login.Username,
             IcoPath = icon,
-            ContextData = item.Id,
+            ContextData = (item.Id, item.Login.Totp is not null),
             Action = _ => {
                 return true;
             },
@@ -250,8 +250,8 @@ public class Main : IAsyncPlugin, ISettingProvider, IContextMenu {
     }
 
     public List<Result> LoadContextMenus(Result selectedResult) {
-        if (selectedResult.ContextData is not Guid id) return new List<Result>();
-        return new List<Result> {
+        if (selectedResult.ContextData is not (Guid id, bool hasTotp)) return new List<Result>();
+        var result = new List<Result> {
             new Result {
                 Title = $"{selectedResult.Title} — {selectedResult.SubTitle}",
                 SubTitle = "Copy username",
@@ -273,5 +273,20 @@ public class Main : IAsyncPlugin, ISettingProvider, IContextMenu {
                 },
             },
         };
+
+        if (hasTotp) {
+            result.Add(new Result {
+                Title = $"{selectedResult.Title} — {selectedResult.SubTitle}",
+                SubTitle = "Copy TOTP",
+                IcoPath = selectedResult.IcoPath,
+                AsyncAction = async _ => {
+                    var totp = await _cli.GetTotp(id);
+                    _context.API.CopyToClipboard(totp);
+                    return true;
+                },
+            });
+        }
+
+        return result;
     }
 }
